@@ -58,8 +58,8 @@ int main()
     return 0;
   }
   
-  table = malloc(s * sizeof(long int *));
-  send = malloc(n * sizeof(long int *));
+  table = malloc(s * sizeof(long int));
+  send = malloc(n * sizeof(long int));
   for (i = 0; i < s; i++) {
     table[i] = -1;
   }
@@ -80,7 +80,9 @@ int main()
       if (countn == 0) {
         continue;
       } else {
-        table[i] = min_n(send, countn) + 1;  
+        if (min_n(send, countn) != -1) {
+          table[i] = min_n(send, countn) + 1;  
+        }
       }
     }
   }
@@ -122,7 +124,7 @@ int main()
 
 long int min_n(long int *ar, int n) {
   int i;
-  long int min; 
+  long int min = -1; 
   int count = 0;
   for (i = 0; i < n; i++) {
     if (ar[i] == -1) {

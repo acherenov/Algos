@@ -5,7 +5,7 @@ long int min_n(long int *ar, int n);
 
 int main()
 {
-  int n, count = 0, countn = 0;
+  int n, count = 0;
   long int result = -1;
   long int *table;
   long int *numbers;
@@ -13,7 +13,7 @@ int main()
   long int s; 
   long int i, j;
   long int check;
-  long int rn; 
+
   
   scanf("%d", &n);
  
@@ -24,20 +24,13 @@ int main()
   
   numbers = malloc(n * sizeof(long int));
   
+  /* read-in notionals */
   for (i = 0; i < n; i++) {
-    scanf("%ld", &rn);
-    if (countn == 0) {
-      numbers[countn] = rn;
-      countn++;
-    } else {
-      if (numbers[countn - 1] != rn) {
-        numbers[countn] = rn;
-        countn++;
-      }
-    }
+    scanf("%ld", &numbers[i]);
   }
+  
   scanf("%ld", &s);
-  n = countn;
+  count = 0;
   for (i = 0; i < n; i++) {
     if (numbers[i] < s) {
       count++;
@@ -70,18 +63,20 @@ int main()
   
   for (i = 0; i < s; i++) {
     if (table[i] == -1) { 
-      countn = 0;
+      count = 0;
       for (j = 0; j < n; j++) {
         if (i - numbers[j] >= 0) {
-          send[countn] = table[i - numbers[j]]; 
-          countn++;
+          if (table[i - numbers[j]] != -1) {
+            send[count] = table[i - numbers[j]]; 
+            count++;  
+          }
         }
       }
-      if (countn == 0) {
+      if (count == 0) {
         continue;
       } else {
-        if (min_n(send, countn) != -1) {
-          table[i] = min_n(send, countn) + 1;  
+        if (min_n(send, count) != -1) {
+          table[i] = min_n(send, count) + 1;  
         }
       }
     }
@@ -99,18 +94,18 @@ int main()
   result = table[s - 1];
   printf("%ld\n", result);
   j = s - 1;
-  check = 1; 
-  while (check <= result) {
+  while (result > 0) {
     if (table[j] == 1) {
       printf("%ld", j + 1);
       break;
     }
-    
     for (i = 0; i < n; i++) {
-      if (table[j - numbers[i]] == table[j] - 1) {
-        printf("%ld ", numbers[i]);
-        check++;
-        j -= numbers[i];
+      if (j - numbers[i] >= 0){
+        if (table[j - numbers[i]] == table[j] - 1) {
+          printf("%ld ", numbers[i]);
+          result -= 1;
+          j -= numbers[i];
+        } 
       }
     }
   }
@@ -124,19 +119,13 @@ int main()
 
 long int min_n(long int *ar, int n) {
   int i;
-  long int min = -1; 
-  int count = 0;
+  long int min = ar[0]; 
   for (i = 0; i < n; i++) {
     if (ar[i] == -1) {
       continue;
     }
-    if (count == 0) {
-      min = ar[0];
-      count++;
-    } else {
-      if (ar[i] < min) {
-        min = ar[i];
-      }
+    if (ar[i] < min) {
+      min = ar[i];
     }
   }
   return min;

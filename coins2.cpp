@@ -2,6 +2,7 @@
 #include <stdio.h> 
 
 long int min_n(long int *ar, int n);
+long int max_n(long int *ar, int n);
 
 int main()
 {
@@ -13,7 +14,6 @@ int main()
   long int s; 
   long int i, j;
   long int check;
-
   
   scanf("%d", &n);
  
@@ -33,7 +33,23 @@ int main()
   count = 0;
   for (i = 0; i < n; i++) {
     if (numbers[i] < s) {
-      count++;
+      if (count == 0) {
+        numbers[0] = numbers[i];
+        count++;
+      } else {
+        check = 0;
+        for (j = 0; j < count; j++) {
+          if (numbers[j] == numbers[i]) {
+            check = 1;
+          }
+        }
+        if (check == 0) {
+          numbers[count] = numbers[i];
+          count++;
+        }
+          
+      }
+      
     }
     if (numbers[i] == s) {
       result = 1;
@@ -43,8 +59,34 @@ int main()
       return 0;
     }
   }
+  n = count;
+  
+  if (s % max_n(numbers, n) == 0) {
+    j =  max_n(numbers, n);
+    result = s / j;
+    printf("%ld\n", result);
+    for (i = 0; i < result; i++) {
+      printf("%ld ", j);  
+    }
+    free(numbers);
+    return 0;
+  }
   
   if (count == 0) {
+    result = -1;
+    printf("%ld", result);
+    free(numbers);
+    return 0;
+  }
+  
+  check = 1;
+  for (i = 0; i < n; i++) {
+    if (numbers[i] % 2 == 0) {
+      check = 0;
+    }
+  }
+  
+  if (check != 0 && (s % 2) == 0) {
     result = -1;
     printf("%ld", result);
     free(numbers);
@@ -61,7 +103,13 @@ int main()
     table[numbers[i] - 1] = 1;
   }
   
-  for (i = 0; i < s; i++) {
+  j = max_n(numbers, n);
+  for (i = 2 * j - 1; i < s; i += j) {
+    table[i] = (i + 1) / j;
+  }
+  
+  j = min_n(numbers, n);
+  for (i = j; i < s; i++) {
     if (table[i] == -1) { 
       count = 0;
       for (j = 0; j < n; j++) {
@@ -129,4 +177,18 @@ long int min_n(long int *ar, int n) {
     }
   }
   return min;
+}
+
+long int max_n(long int *ar, int n) {
+  int i;
+  long int max = ar[0]; 
+  for (i = 0; i < n; i++) {
+    if (ar[i] == -1) {
+      continue;
+    }
+    if (ar[i] > max) {
+      max = ar[i];
+    }
+  }
+  return max;
 }

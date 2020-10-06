@@ -2,45 +2,45 @@
 #include <stdio.h> 
 #include <limits.h>
 
-long int min_n(long int *ar, int n, long int *k);
-long int max_n(long int *ar, int n);
+int min_n(int *ar, int n, int *k);
+int max_n(int *ar, int n);
 
 int main()
 {
   int n, count = 0;
-  long int result = -1;
-  long int *table;
-  long int *table_copy;
-  long int *numbers;
-  long int *send;
-  long int s; 
-  long int i, j;
-  long int *send_copy;
-  long int send_i;
-  long int max;  
-  long int check; 
+  int result = -1;
+  int *table;
+  int *table_copy;
+  int *numbers;
+  int *send;
+  int s; 
+  int i, j;
+  int *send_copy;
+  int send_i;
+  int max;  
+  int check; 
   
   scanf("%d", &n);
  
   if (n == 0) {
-    printf("%ld", result);
+    printf("%d", result);
     return 0;
   }
   
-  numbers = malloc(n * sizeof(long int));
+  numbers = malloc(n * sizeof(int));
   
   /* read-in notionals */
   for (i = 0; i < n; i++) {
-    scanf("%ld", &numbers[i]);
+    scanf("%d", &numbers[i]);
   }
   
-  scanf("%ld", &s);
-  table = malloc((s + 1) * sizeof(long int));
-  table_copy = malloc((s + 1) * sizeof(long int));
-  send = malloc(n * sizeof(long int));
-  send_copy = malloc(n * sizeof(long int));
+  scanf("%d", &s);
+  table = malloc((s + 1) * sizeof(int));
+  table_copy = malloc((s + 1) * sizeof(int));
+  send = malloc(n * sizeof(int));
+  send_copy = malloc(n * sizeof(int));
   for (i = 1; i <= s; i++) {
-    table[i] = LONG_MAX;
+    table[i] = INT_MAX;
   }
   table[0] = 0;
   count = 0;
@@ -66,8 +66,8 @@ int main()
     }
     if (numbers[i] == s) {
       result = 1;
-      printf("%ld\n", result);
-      printf("%ld", numbers[i]);
+      printf("%d\n", result);
+      printf("%d", numbers[i]);
       free(numbers);
       return 0;
     }
@@ -88,7 +88,7 @@ int main()
         continue;
       } else {
         result = min_n(send, count, &send_i);
-        if (result != -1) {
+        if (result != INT_MAX) {
           table[i] = result + 1;  
           table_copy[i] = send_copy[send_i];
         }
@@ -98,7 +98,7 @@ int main()
         send[j] = table[i - numbers[j]];
       }
       result = min_n(send, n, &send_i);
-      if (result != -1) {
+      if (result != INT_MAX) {
         table[i] = result + 1;  
         table_copy[i] = numbers[send_i];
       }
@@ -112,15 +112,15 @@ int main()
     free(table);
     free(send_copy);
     free(table_copy);
-    printf("%ld", result);
+    printf("%d", result);
     return 0;
   }
   
   result = table[s];
-  printf("%ld\n", result);
+  printf("%d\n", result);
   j = s;
   while (result > 0) {
-    printf("%ld ", table_copy[j]);
+    printf("%d ", table_copy[j]);
     j -= table_copy[j];
     result -= 1;
   }
@@ -134,9 +134,9 @@ int main()
   
 }
 
-long int min_n(long int *ar, int n, long int *k) {
+int min_n(int *ar, int n, int *k) {
   int i;
-  long int min = ar[0]; 
+  int min = ar[0]; 
   *k = 0;
   for (i = 0; i < n; i++) {
     if (ar[i] == -1) {
@@ -150,9 +150,9 @@ long int min_n(long int *ar, int n, long int *k) {
   return min;
 }
 
-long int max_n(long int *ar, int n) {
+int max_n(int *ar, int n) {
   int i;
-  long int max = ar[0]; 
+  int max = ar[0]; 
   for (i = 0; i < n; i++) {
     if (ar[i] == -1) {
       continue;
